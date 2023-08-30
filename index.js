@@ -22,6 +22,7 @@ score1EL.textContent = 0;
 const score = [0, 0];
 let currentScore = 0;
 let activePlayer = 0;
+let playing = true;
 
 const switchPlayer = () => {
   document.getElementById(`current--${activePlayer}`).textContent = 0;
@@ -36,32 +37,45 @@ diceEL.classList.add("hidden");
 //rolling function
 
 btnRoll.addEventListener("click", function () {
-  //randon number
-  console.log("click");
-  const dice = Math.trunc(Math.random() * 6) + 1;
-  //dice
-  diceEL.classList.remove("hidden");
-  diceEL.src = `./Images/dice-${dice}.png`;
+  if (playing) {
+    //randon number
+    console.log("click");
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    //dice
+    diceEL.classList.remove("hidden");
+    diceEL.src = `./Images/dice-${dice}.png`;
 
-  //conditon
-  if (dice !== 1) {
-    currentScore += dice;
+    //conditon
+    if (dice !== 1) {
+      currentScore += dice;
 
-    document.getElementById(`current--${activePlayer}`).textContent =
-      currentScore;
-    // current0EL.textContent = currentScore;
-  } else {
-    switchPlayer();
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+      // current0EL.textContent = currentScore;
+    } else {
+      switchPlayer();
+    }
   }
 });
 
 btnHold.addEventListener("click", function () {
-  console.log(score[activePlayer]);
-  console.log("clicked me properly");
+  if (playing) {
+    console.log(score[activePlayer]);
+    console.log("clicked me properly");
 
-  score[activePlayer] += currentScore;
-  document.getElementById(`score--${activePlayer}`).textContent =
-    score[activePlayer];
-
-  switchPlayer();
+    score[activePlayer] += currentScore;
+    document.getElementById(`score--${activePlayer}`).textContent =
+      score[activePlayer];
+    if (score[activePlayer] >= 100) {
+      playing = false;
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add("player--winner");
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add("player--active");
+    } else {
+      switchPlayer();
+    }
+  }
 });
